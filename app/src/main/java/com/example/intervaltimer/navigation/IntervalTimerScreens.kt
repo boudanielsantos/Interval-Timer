@@ -4,4 +4,5 @@ enum class IntervalTimerScreens {
     HOME_SCREEN,
     START_SCREEN,
     REST_SCREEN,
+    SAVED_SCREEN
 }
