@@ -117,7 +117,7 @@ fun PlusMinusField(
                 modifier = Modifier.weight(1f),
                 onValueChange = { newValue ->
                     if (newValue.isEmpty()) {
-                        firstValueState.value = 0
+                        firstValueState.value = if (!isTime) 1 else 0
                     } else {
                         val filtered = newValue.filter { it.isDigit() }
                         filtered.toIntOrNull()?.let {
@@ -138,7 +138,7 @@ fun PlusMinusField(
                     fontSize = 45.sp
                 )
             )
-            
+
             //Minute TextField
             if (isTime) {
                 Text(":", fontSize = 45.sp, fontWeight = FontWeight.Bold)

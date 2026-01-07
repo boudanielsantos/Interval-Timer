@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,12 +31,12 @@ import com.example.intervaltimer.model.IntervalState
 import java.util.logging.Logger
 
 @Composable
-fun HomeScreen(onNavigateToReady: () -> Unit) {
-    HomeContent(onNavigateToReady = onNavigateToReady)
+fun HomeScreen(intervalState: IntervalState, onNavigateToReady: () -> Unit) {
+    HomeContent(intervalState = intervalState, onNavigateToReady = onNavigateToReady)
 }
 
 @Composable
-fun HomeContent(onNavigateToReady: () -> Unit) {
+fun HomeContent(intervalState: IntervalState, onNavigateToReady: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,18 +44,6 @@ fun HomeContent(onNavigateToReady: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        val intervalState by remember {
-            mutableStateOf(
-                IntervalState(
-                    mutableStateOf(""),
-                    mutableStateOf(0),
-                    workCountMinute = mutableStateOf(0),
-                    workCountSecond = mutableStateOf(0),
-                    restCountMinute = mutableStateOf(0),
-                    restCountSecond = mutableStateOf(0),
-                )
-            )
-        }
         Log.i("TAG,", "HELLO THIS IS INTERVALSTATEVALUES ${intervalState.toString()}")
         Surface(
             modifier = Modifier
@@ -70,7 +59,7 @@ fun HomeContent(onNavigateToReady: () -> Unit) {
                 PlusMinusField(
                     label = "SETS",
                     onMinus = {
-                        if (intervalState.sets.value > 0)
+                        if (intervalState.sets.value > 1)
                             intervalState.sets.value--
                     },
                     onPlus = {

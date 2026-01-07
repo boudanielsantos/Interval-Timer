@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.intervaltimer.R
 import kotlinx.coroutines.delay
@@ -61,8 +61,8 @@ fun ReadyContent(onNavigateToWorkScreen: () -> Unit) {
             onNavigateToWorkScreen()
         }
 
-        Text("GET READY", fontSize = 45.sp, color = Color.LightGray)
 
-        Text("00: ${secondsRemaining.toString().padStart(2, '0')}", fontSize = 45.sp)
+        Text("00: ${secondsRemaining.toString().padStart(2, '0')}", fontSize = 100.sp, fontWeight = FontWeight.Bold)
+        Text("GET READY", fontSize = 45.sp, color = Color.Gray)
     }
 }
