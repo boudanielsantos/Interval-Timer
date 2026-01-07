@@ -32,8 +32,8 @@ fun BottomNavigationBar(navController: NavController = rememberNavController()) 
         items.forEach {
             NavigationBarItem(
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.White, // Color when selected
-                    selectedTextColor = Color.White, // Text color when selected
+                    selectedIconColor = Color.Gray, // Color when selected
+                    selectedTextColor = MaterialTheme.colorScheme.primary, // Text color when selected
                     unselectedIconColor = Color.Gray, // Color when unselected
                     unselectedTextColor = Color.Gray, // Text color when unselected
                     indicatorColor = MaterialTheme.colorScheme.primary
@@ -50,7 +50,6 @@ fun BottomNavigationBar(navController: NavController = rememberNavController()) 
                                 saveState = true
                             }
                             launchSingleTop = true
-                            restoreState = true
                         }
                     }
 

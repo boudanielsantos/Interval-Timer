@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.intervaltimer.navigation.BottomNavigationBar
 import com.example.intervaltimer.navigation.IntervalTimerScreens
 import com.example.intervaltimer.screens.home.HomeScreen
+import com.example.intervaltimer.screens.ready.ReadyScreen
 import com.example.intervaltimer.screens.rest.RestScreen
 import com.example.intervaltimer.screens.save.SavedScreen
 import com.example.intervaltimer.screens.start.StartScreen
@@ -57,10 +58,13 @@ fun IntervalTimerContent() {
                     RestScreen()
                 }
                 composable(route = IntervalTimerScreens.HOME_SCREEN.name) {
-                    HomeScreen(onNavigateToStart = { navController.navigate(IntervalTimerScreens.START_SCREEN.name) })
+                    HomeScreen(onNavigateToReady = { navController.navigate(IntervalTimerScreens.READY_SCREEN.name) })
                 }
                 composable(route = IntervalTimerScreens.SAVED_SCREEN.name) {
                     SavedScreen()
+                }
+                composable(route = IntervalTimerScreens.READY_SCREEN.name) {
+                    ReadyScreen()
                 }
             }
         }

@@ -30,12 +30,12 @@ import com.example.intervaltimer.model.IntervalState
 import java.util.logging.Logger
 
 @Composable
-fun HomeScreen(onNavigateToStart: () -> Unit) {
-    HomeContent()
+fun HomeScreen(onNavigateToReady: () -> Unit) {
+    HomeContent(onNavigateToReady = onNavigateToReady)
 }
 
 @Composable
-fun HomeContent() {
+fun HomeContent(onNavigateToReady: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -132,7 +132,7 @@ fun HomeContent() {
                         .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
                         .height(45.dp),
                     shape = RoundedCornerShape(8.dp),
-                    onClick = {}) {
+                    onClick = { onNavigateToReady() }) {
                     Text("START")
                 }
 
