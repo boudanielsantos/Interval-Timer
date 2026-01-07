@@ -19,7 +19,7 @@ import com.example.intervaltimer.screens.home.HomeScreen
 import com.example.intervaltimer.screens.ready.ReadyScreen
 import com.example.intervaltimer.screens.rest.RestScreen
 import com.example.intervaltimer.screens.save.SavedScreen
-import com.example.intervaltimer.screens.start.StartScreen
+import com.example.intervaltimer.screens.work.WorkScreen
 import com.example.intervaltimer.ui.theme.IntervalTimerTheme
 
 class MainActivity : ComponentActivity() {
@@ -51,8 +51,8 @@ fun IntervalTimerContent() {
                 navController = navController,
                 startDestination = IntervalTimerScreens.HOME_SCREEN.name
             ) {
-                composable(route = IntervalTimerScreens.START_SCREEN.name) {
-                    StartScreen()
+                composable(route = IntervalTimerScreens.WORK_SCREEN.name) {
+                    WorkScreen()
                 }
                 composable(route = IntervalTimerScreens.REST_SCREEN.name) {
                     RestScreen()
@@ -64,7 +64,11 @@ fun IntervalTimerContent() {
                     SavedScreen()
                 }
                 composable(route = IntervalTimerScreens.READY_SCREEN.name) {
-                    ReadyScreen()
+                    ReadyScreen(onNavigateToWorkScreen = {
+                        navController.navigate(
+                            IntervalTimerScreens.WORK_SCREEN.name
+                        )
+                    })
                 }
             }
         }
