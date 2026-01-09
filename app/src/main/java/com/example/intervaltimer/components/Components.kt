@@ -148,8 +148,8 @@ fun PlusMinusField(
                     singleLine = true,
                     modifier = Modifier.weight(1f),
                     onValueChange = { newValue ->
-                        if (newValue.isEmpty()) {
-                            secondValueState.value = 0
+                        if (newValue.isNotEmpty() && newValue.toInt() > 59) {
+                            secondValueState.value = 59
                         } else {
                             val filtered = newValue.filter { it.isDigit() }
                             filtered.toIntOrNull()?.let {

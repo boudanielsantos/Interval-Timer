@@ -48,9 +48,9 @@ fun HomeContent(intervalState: IntervalState, onNavigateToReady: () -> Unit) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .border(2.dp, Color.Blue, RoundedCornerShape(8.dp)), // Border applied here
+                .border(2.dp, Color.Blue, RoundedCornerShape(8.dp)),
             color = Color.LightGray,
-            shape = RoundedCornerShape(8.dp) // Shape for the surface itself
+            shape = RoundedCornerShape(8.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

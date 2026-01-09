@@ -5,5 +5,6 @@ enum class IntervalTimerScreens {
     READY_SCREEN,
     WORK_SCREEN,
     REST_SCREEN,
-    SAVED_SCREEN
+    SAVED_SCREEN,
+    FINISH_SCREEN
 }
