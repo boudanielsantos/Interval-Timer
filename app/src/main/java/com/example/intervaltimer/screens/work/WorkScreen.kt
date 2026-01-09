@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.example.intervaltimer.model.IntervalState
 import com.example.intervaltimer.services.TimerService
 import com.example.utils.Utils.formatMillis
+import kotlinx.coroutines.delay
 
 @Composable
 fun WorkScreen(intervalState: IntervalState, onNavigateToRest: () -> Unit) {
@@ -79,6 +80,7 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit) {
             hasTimerStarted = true
         }
         if (remainingTime <= 0L && hasTimerStarted) {
+            delay(400)
             onNavigateToRest()
         }
     }

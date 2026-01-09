@@ -3,10 +3,13 @@ package com.example.intervaltimer.services
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.media.SoundPool
 import android.os.IBinder
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.app.NotificationCompat
+import com.example.intervaltimer.R
 import com.example.utils.Utils.formatMillis
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,12 +58,27 @@ class TimerService : Service() {
 
     private fun runTimerLoop() {
         timerJob?.cancel()
+        val soundPool =
+            SoundPool.Builder().setMaxStreams(2).build()
+
+
+        val tickSoundId = soundPool.load(this, R.raw.single_tick, 1)
+        val doubleTickSoundId = soundPool.load(this, R.raw.double_tick, 1)
+
         timerJob = serviceScope.launch {
+
             while (timeLeft.longValue > 0) {
                 updateNotification()
                 delay(1000)
                 timeLeft.longValue -= 1000
+
+                if (timeLeft.longValue < 4000L) {
+                    soundPool.play(tickSoundId, 1f, 1f, 1, 0, 1f)
+                }
+
+
             }
+            if (timeLeft.longValue == 0L) soundPool.play(doubleTickSoundId, 1f, 1f, 1, 0, 1f)
             isRunning.value = false
             stopSelf()
         }
