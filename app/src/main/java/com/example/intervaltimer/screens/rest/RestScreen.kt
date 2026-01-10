@@ -16,6 +16,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import com.example.intervaltimer.model.IntervalState
 import com.example.intervaltimer.services.TimerService
 import com.example.utils.Utils.formatMillis
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun RestScreen(
@@ -56,8 +58,9 @@ fun RestScreen(
             stopTimerService(context)
 
             if (intervalState.sets.value > 1) {
-                intervalState.sets.value--
                 onNavigateToWorkScreen()
+                delay(150)
+                intervalState.sets.value--
             } else {
                 onNavigateToFinishScreen()
             }
@@ -88,6 +91,7 @@ fun RestContent(
     skipClicked: MutableState<Boolean>
 
 ) {
+    val scope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -112,8 +116,12 @@ fun RestContent(
                 skipClicked.value = true
                 stopTimerService(context)
                 if (setsRemaining > 1) {
-                    intervalState.sets.value--
                     onNavigateToWorkScreen()
+                    scope.launch {
+                        delay(150)
+                        intervalState.sets.value--
+                    }
+
                 } else {
                     onNavigateToFinishScreen()
                 }

@@ -137,7 +137,11 @@ fun IntervalTimerContent() {
                 }
 
                 composable(route = IntervalTimerScreens.FINISH_SCREEN.name) {
-                    FinishScreen()
+                    FinishScreen(
+                        onNavigateToWork = {
+                            navController.navigate(IntervalTimerScreens.WORK_SCREEN.name)
+                        }
+                    )
                 }
             }
         }
