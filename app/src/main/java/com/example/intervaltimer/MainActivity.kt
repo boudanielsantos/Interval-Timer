@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -86,6 +87,8 @@ fun IntervalTimerContent() {
                 .fillMaxSize()
         ) {
             val viewModel: TimerViewModel = hiltViewModel()
+            var totalSets = remember { viewModel.intervalState.sets.value }
+
             NavHost(
                 navController = navController,
                 startDestination = IntervalTimerScreens.HOME_SCREEN.name
@@ -94,27 +97,33 @@ fun IntervalTimerContent() {
 
                     WorkScreen(
                         intervalState = viewModel.intervalState,
-                        onNavigateToRest = { navController.navigate(IntervalTimerScreens.REST_SCREEN.name) })
+                        onNavigateToRest = { navController.navigate(IntervalTimerScreens.REST_SCREEN.name) },
+                        totalSets = totalSets
+                    )
                 }
                 composable(route = IntervalTimerScreens.REST_SCREEN.name) {
                     RestScreen(
                         onNavigateToWorkScreen = {
-                        navController.navigate(
-                            IntervalTimerScreens.WORK_SCREEN.name
-                        )
-                    }, onNavigateToFinishScreen = {
-                        navController.navigate(
-                            IntervalTimerScreens.FINISH_SCREEN.name
-                        )
+                            navController.navigate(
+                                IntervalTimerScreens.WORK_SCREEN.name
+                            )
+                        }, onNavigateToFinishScreen = {
+                            navController.navigate(
+                                IntervalTimerScreens.FINISH_SCREEN.name
+                            )
 
-                    },
-                        intervalState = viewModel.intervalState
+                        },
+                        intervalState = viewModel.intervalState,
+                        totalSets = totalSets
                     )
                 }
                 composable(route = IntervalTimerScreens.HOME_SCREEN.name) {
                     HomeScreen(
                         intervalState = viewModel.intervalState,
-                        onNavigateToReady = { navController.navigate(IntervalTimerScreens.READY_SCREEN.name) })
+                        onNavigateToReady = {
+                            totalSets = viewModel.intervalState.sets.value
+                            navController.navigate(IntervalTimerScreens.READY_SCREEN.name)
+                        })
                 }
                 composable(route = IntervalTimerScreens.SAVED_SCREEN.name) {
                     SavedScreen()

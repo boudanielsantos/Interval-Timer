@@ -38,12 +38,12 @@ import com.example.utils.Utils.formatMillis
 import kotlinx.coroutines.delay
 
 @Composable
-fun WorkScreen(intervalState: IntervalState, onNavigateToRest: () -> Unit) {
-    WorkContent(intervalState, onNavigateToRest)
+fun WorkScreen(intervalState: IntervalState, onNavigateToRest: () -> Unit, totalSets: Int) {
+    WorkContent(intervalState, onNavigateToRest, totalSets)
 }
 
 @Composable
-fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit) {
+fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit, totalSets: Int) {
     val context = LocalContext.current
     val remainingTime by TimerService.timeLeft
     val isRunning by TimerService.isRunning
@@ -51,7 +51,6 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit) {
     val totalTimeMillis = (intervalState.workCountMinute.value * 60000L) +
             (intervalState.workCountSecond.value * 1000L)
     var hasTimerStarted by remember { mutableStateOf(false) }
-
     LaunchedEffect(Unit) {
         // 1. Create Notification Channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -94,7 +93,7 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit) {
                 .background(Color.Green)
         ) {
 
-            Text(intervalState.sets.value.toString(), fontSize = 45.sp)
+            Text("${intervalState.sets.value}/${totalSets}", fontSize = 45.sp)
             Text(
                 text = formatMillis(remainingTime),
                 fontSize = 100.sp,

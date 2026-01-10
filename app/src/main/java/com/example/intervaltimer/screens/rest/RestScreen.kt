@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,7 +31,8 @@ import com.example.utils.Utils.formatMillis
 fun RestScreen(
     intervalState: IntervalState,
     onNavigateToWorkScreen: () -> Unit,
-    onNavigateToFinishScreen: () -> Unit
+    onNavigateToFinishScreen: () -> Unit,
+    totalSets: Int
 ) {
     val context = LocalContext.current
     val remainingTime by TimerService.timeLeft
@@ -54,33 +57,45 @@ fun RestScreen(
         }
         wasRunning = isRunning
     }
-    RestContent(remainingTime, intervalState.sets.value)
+    RestContent(remainingTime, intervalState.sets.value, totalSets)
 }
 
 @Composable
 fun RestContent(
     remainingTime: Long,
-    setsRemaining: Int
+    setsRemaining: Int,
+    totalSets: Int
 ) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Blue)
+        ) {
+            Text("${setsRemaining}/${totalSets}", fontSize = 45.sp)
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Blue)
-    ) {
-        Text(text = "Set $setsRemaining", fontSize = 45.sp, color = Color.White)
+            Text(
+                text = formatMillis(remainingTime),
+                fontSize = 100.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-        Text(
-            text = formatMillis(remainingTime),
-            fontSize = 100.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
+            Text(text = "REST", fontSize = 45.sp, color = Color.LightGray)
+        }
 
-        Text(text = "REST", fontSize = 45.sp, color = Color.LightGray)
+        Button(
+            onClick = {},
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(18.dp)
+        ) {
+            Text("Skip", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
     }
+
+
 }
 
 private fun startTimerService(context: Context, durationMs: Long) {
