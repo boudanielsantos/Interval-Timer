@@ -2,6 +2,7 @@ package com.example.intervaltimer.screens.work
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +52,7 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit, tota
     val totalTimeMillis = (intervalState.workCountMinute.value * 60000L) +
             (intervalState.workCountSecond.value * 1000L)
     var hasTimerStarted by remember { mutableStateOf(false) }
+    val skipClicked = remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         // 1. Create Notification Channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -63,7 +65,7 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit, tota
             manager.createNotificationChannel(channel)
         }
 
-        // 2. Start Service Automatically
+        delay(250)
         if (!isRunning) {
             val intent = Intent(context, TimerService::class.java).apply {
                 action = TimerService.ACTION_START
@@ -78,7 +80,8 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit, tota
         if (remainingTime > 0L) {
             hasTimerStarted = true
         }
-        if (remainingTime <= 0L && hasTimerStarted) {
+        if (remainingTime <= 0L && hasTimerStarted && !skipClicked.value) {
+            stopTimerService(context)
             delay(400)
             onNavigateToRest()
         }
@@ -125,7 +128,10 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit, tota
         }
 
         Button(
-            onClick = {},
+            onClick = {
+                stopTimerService(context)
+                onNavigateToRest()
+            },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(18.dp)
@@ -135,5 +141,14 @@ fun WorkContent(intervalState: IntervalState, onNavigateToRest: () -> Unit, tota
 
 
     }
+
+
+}
+
+private fun stopTimerService(context: Context) {
+    val intent = Intent(context, TimerService::class.java).apply {
+        action = TimerService.ACTION_STOP
+    }
+    context.startService(intent)
 }
 

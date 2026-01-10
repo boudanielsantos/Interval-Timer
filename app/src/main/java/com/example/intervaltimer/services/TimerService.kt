@@ -34,6 +34,7 @@ class TimerService : Service() {
 
             ACTION_PAUSE -> pauseTimer()
             ACTION_RESUME -> resumeTimer()
+            ACTION_STOP -> stopTimer()
         }
         return START_STICKY
     }
@@ -43,6 +44,15 @@ class TimerService : Service() {
         isPaused.value = false
         isRunning.value = true
         runTimerLoop()
+    }
+
+    private fun stopTimer() {
+        timerJob?.cancel()
+        timeLeft.longValue = 0L
+        isRunning.value = false
+        isPaused.value = false
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf()
     }
 
     private fun pauseTimer() {
@@ -118,6 +128,7 @@ class TimerService : Service() {
         const val ACTION_PAUSE = "ACTION_PAUSE"
         const val ACTION_RESUME = "ACTION_RESUME"
 
+        const val ACTION_STOP = "ACTION_STOP"
 
         val timeLeft = mutableLongStateOf(0L)
         val isRunning = mutableStateOf(false)

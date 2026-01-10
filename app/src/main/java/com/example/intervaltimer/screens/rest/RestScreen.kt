@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.intervaltimer.model.IntervalState
 import com.example.intervaltimer.services.TimerService
 import com.example.utils.Utils.formatMillis
+import kotlinx.coroutines.delay
 
 @Composable
 fun RestScreen(
@@ -38,16 +40,21 @@ fun RestScreen(
     val remainingTime by TimerService.timeLeft
     val isRunning by TimerService.isRunning
     var wasRunning by remember { mutableStateOf(isRunning) }
+    val skipClicked = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
         val totalRestTime =
             (intervalState.restCountMinute.value * 60 + intervalState.restCountSecond.value) * 1000L
         if (totalRestTime > 0) {
+            delay(250)
             startTimerService(context, totalRestTime)
         }
     }
 
     LaunchedEffect(isRunning) {
-        if (wasRunning && !isRunning && remainingTime <= 0) {
+        //Should only run when timer is completed naturally without skipping
+        if (wasRunning && !isRunning && remainingTime <= 0 && !skipClicked.value) {
+            stopTimerService(context)
+
             if (intervalState.sets.value > 1) {
                 intervalState.sets.value--
                 onNavigateToWorkScreen()
@@ -57,14 +64,29 @@ fun RestScreen(
         }
         wasRunning = isRunning
     }
-    RestContent(remainingTime, intervalState.sets.value, totalSets)
+    RestContent(
+        remainingTime = remainingTime,
+        setsRemaining = intervalState.sets.value,
+        totalSets = totalSets,
+        intervalState = intervalState,
+        onNavigateToWorkScreen = onNavigateToWorkScreen,
+        onNavigateToFinishScreen = onNavigateToFinishScreen,
+        context = context,
+        skipClicked = skipClicked
+    )
 }
 
 @Composable
 fun RestContent(
     remainingTime: Long,
     setsRemaining: Int,
-    totalSets: Int
+    intervalState: IntervalState,
+    totalSets: Int,
+    onNavigateToWorkScreen: () -> Unit = {},
+    onNavigateToFinishScreen: () -> Unit = {},
+    context: Context,
+    skipClicked: MutableState<Boolean>
+
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -86,7 +108,17 @@ fun RestContent(
         }
 
         Button(
-            onClick = {},
+            onClick = {
+                skipClicked.value = true
+                stopTimerService(context)
+                if (setsRemaining > 1) {
+                    intervalState.sets.value--
+                    onNavigateToWorkScreen()
+                } else {
+                    onNavigateToFinishScreen()
+                }
+
+            },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(18.dp)
@@ -102,6 +134,13 @@ private fun startTimerService(context: Context, durationMs: Long) {
     val intent = Intent(context, TimerService::class.java).apply {
         action = TimerService.ACTION_START
         putExtra("DURATION_MS", durationMs)
+    }
+    context.startForegroundService(intent)
+}
+
+private fun stopTimerService(context: Context) {
+    val intent = Intent(context, TimerService::class.java).apply {
+        action = TimerService.ACTION_STOP
     }
     context.startService(intent)
 }
