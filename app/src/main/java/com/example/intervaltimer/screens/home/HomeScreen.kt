@@ -165,6 +165,7 @@ fun HomeContent(
                     title = "Save Interval",
                     nameState = workoutNameState,
                     openDialog = openSaveDialogState,
+                    hasInput = true,
                     onYesPressed = {
                         openSaveDialogState.value = false
                         val intervalTimer =

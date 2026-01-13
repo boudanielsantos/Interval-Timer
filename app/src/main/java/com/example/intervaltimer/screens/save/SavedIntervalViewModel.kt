@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class SavedIntervalViewModel @Inject constructor(intervalTimerRepository: IntervalTimerRepository) :
+class SavedIntervalViewModel @Inject constructor(val intervalTimerRepository: IntervalTimerRepository) :
     ViewModel() {
 
 
@@ -40,4 +40,7 @@ class SavedIntervalViewModel @Inject constructor(intervalTimerRepository: Interv
         }
     }
 
+    fun deleteInterval(intervalTimer: IntervalTimer) = viewModelScope.launch {
+        intervalTimerRepository.deleteInterval(intervalTimer)
+    }
 }

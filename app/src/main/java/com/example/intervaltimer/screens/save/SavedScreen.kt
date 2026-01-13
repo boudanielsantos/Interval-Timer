@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,8 +35,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.intervaltimer.components.ShowAlertDialog
+import com.example.intervaltimer.components.ShowToast
 import com.example.intervaltimer.model.IntervalTimer
 import com.example.intervaltimer.viewmodel.TimerViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SavedScreen(
@@ -47,7 +51,12 @@ fun SavedScreen(
     if (savedIntervals.data == null || savedIntervals.data!!.isEmpty()) {
         ShowNoSavedIntervals()
     } else {
-        SavedContent(savedIntervals.data!!, onNavigateToReady, timerViewModel)
+        SavedContent(
+            savedIntervals.data!!,
+            onNavigateToReady,
+            timerViewModel,
+            savedIntervalViewModel
+        )
     }
 
 }
@@ -71,7 +80,8 @@ fun ShowNoSavedIntervals() {
 fun SavedContent(
     intervals: List<IntervalTimer>,
     onNavigateToReady: () -> Unit,
-    timerViewModel: TimerViewModel
+    timerViewModel: TimerViewModel,
+    savedIntervalViewModel: SavedIntervalViewModel
 ) {
 
     LazyColumn(
@@ -82,7 +92,7 @@ fun SavedContent(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(items = intervals) { interval ->
-            IntervalItem(interval, onNavigateToReady, timerViewModel)
+            IntervalItem(interval, onNavigateToReady, timerViewModel, savedIntervalViewModel)
         }
     }
 
@@ -99,9 +109,17 @@ fun IntervalItem(
         sets = 5
     ),
     onNavigateToReady: () -> Unit,
-    timerViewModel: TimerViewModel
+    timerViewModel: TimerViewModel,
+    savedIntervalViewModel: SavedIntervalViewModel
 ) {
     var showMenu by remember { mutableStateOf(false) }
+    val openDeleteDialogState = remember {
+        mutableStateOf(false)
+    }
+    val showToastState = remember {
+        mutableStateOf(false)
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -129,10 +147,32 @@ fun IntervalItem(
                     )
                     DropdownMenuItem(
                         text = { Text("Delete") },
-                        onClick = { }
+                        onClick = {
+                            openDeleteDialogState.value = true
+                        }
                     )
                 }
             }
+            if (openDeleteDialogState.value) {
+                ShowAlertDialog(
+                    title = "Delete",
+                    message = "Are you sure you want to delete the interval?",
+                    openDialog = openDeleteDialogState,
+                    onYesPressed = {
+                        openDeleteDialogState.value = false
+                        savedIntervalViewModel.deleteInterval(interval)
+                    }
+                )
+            }
+            if (showToastState.value) {
+                ShowToast("Interval Saved")
+                //Reset the ShowToastState to ensure that it will always be shown in the future saving
+                LaunchedEffect(true) {
+                    delay(200)
+                    showToastState.value = false
+                }
+            }
+
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

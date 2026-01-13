@@ -203,38 +203,45 @@ fun PlusMinusField(
 fun ShowAlertDialog(
     title: String,
     message: String? = null,
-    nameState: MutableState<String>,
+    nameState: MutableState<String>? = null,
     openDialog: MutableState<Boolean>,
+    hasInput: Boolean = false,
     onYesPressed: () -> Unit
 ) {
     if (openDialog.value) {
         AlertDialog(
             onDismissRequest = {
-                nameState.value = ""
+                nameState?.value = ""
                 openDialog.value = false
             },
             title = { Text(title) },
             text = {
-                TextField(
-                    value = nameState.value,
-                    onValueChange = {
-                        nameState.value = it
-                    },
-                    isError = nameState.value.isEmpty(),
-                    singleLine = true
-                )
+                if (message?.isNotEmpty() == true) {
+                    Text(message)
+                }
+                if (hasInput && nameState != null) {
+                    TextField(
+                        value = nameState.value,
+                        onValueChange = {
+                            nameState.value = it
+                        },
+                        isError = nameState.value.isEmpty(),
+                        singleLine = true
+                    )
+                }
+
             },
 
             dismissButton = {
                 TextButton(onClick = {
-                    nameState.value = ""
+                    nameState?.value = ""
                     openDialog.value = false
                 }) { Text("Cancel") }
             },
             confirmButton = {
                 TextButton(
                     onClick = onYesPressed,
-                    enabled = nameState.value.isNotEmpty()
+                    enabled = nameState?.value?.isNotEmpty() ?: true
                 ) { Text("OK") }
             }
 
