@@ -1,21 +1,21 @@
 package com.example.intervaltimer.components
 
-import androidx.compose.foundation.combinedClickable
+import android.widget.Toast
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -196,4 +197,52 @@ fun PlusMinusField(
     }
 
 
+}
+
+@Composable
+fun ShowAlertDialog(
+    title: String,
+    message: String? = null,
+    nameState: MutableState<String>,
+    openDialog: MutableState<Boolean>,
+    onYesPressed: () -> Unit
+) {
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                nameState.value = ""
+                openDialog.value = false
+            },
+            title = { Text(title) },
+            text = {
+                TextField(
+                    value = nameState.value,
+                    onValueChange = {
+                        nameState.value = it
+                    },
+                    isError = nameState.value.isEmpty(),
+                    singleLine = true
+                )
+            },
+
+            dismissButton = {
+                TextButton(onClick = {
+                    nameState.value = ""
+                    openDialog.value = false
+                }) { Text("Cancel") }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = onYesPressed,
+                    enabled = nameState.value.isNotEmpty()
+                ) { Text("OK") }
+            }
+
+        )
+    }
+}
+
+@Composable
+fun ShowToast(message: String, length: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(LocalContext.current, message, length).show()
 }

@@ -9,12 +9,12 @@ class IntervalTimerRepository @Inject constructor(val intervalTimerDao: Interval
 
     fun getAllIntervals(): Flow<List<IntervalTimer>> = intervalTimerDao.getAllIntervals()
 
-    fun createInterval(intervalTimer: IntervalTimer) =
+    suspend fun createInterval(intervalTimer: IntervalTimer) =
         intervalTimerDao.createInterval(intervalTimer)
 
-    fun deleteInterval(intervalTimer: IntervalTimer) =
+    suspend fun deleteInterval(intervalTimer: IntervalTimer) =
         intervalTimerDao.deleteInterval(intervalTimer)
 
-    fun updateInterval(intervalTimer: IntervalTimer) =
+    suspend fun updateInterval(intervalTimer: IntervalTimer) =
         intervalTimerDao.updateInterval(intervalTimer)
 }

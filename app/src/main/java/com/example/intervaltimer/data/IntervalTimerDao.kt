@@ -15,11 +15,11 @@ interface IntervalTimerDao {
     fun getAllIntervals(): Flow<List<IntervalTimer>>
 
     @Insert
-    fun createInterval(intervalTimer: IntervalTimer)
+    suspend fun createInterval(intervalTimer: IntervalTimer)
 
     @Delete
-    fun deleteInterval(intervalTimer: IntervalTimer)
+    suspend fun deleteInterval(intervalTimer: IntervalTimer)
 
     @Update
-    fun updateInterval(intervalTimer: IntervalTimer)
+    suspend fun updateInterval(intervalTimer: IntervalTimer)
 }

@@ -28,6 +28,7 @@ import com.example.intervaltimer.navigation.BottomNavigationBar
 import com.example.intervaltimer.navigation.IntervalTimerScreens
 import com.example.intervaltimer.screens.finish.FinishScreen
 import com.example.intervaltimer.screens.home.HomeScreen
+import com.example.intervaltimer.screens.home.HomeViewModel
 import com.example.intervaltimer.screens.ready.ReadyScreen
 import com.example.intervaltimer.screens.rest.RestScreen
 import com.example.intervaltimer.screens.save.SavedScreen
@@ -86,8 +87,8 @@ fun IntervalTimerContent() {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            val viewModel: TimerViewModel = hiltViewModel()
-            var totalSets = remember { viewModel.intervalState.sets.value }
+            val timerViewModel: TimerViewModel = hiltViewModel()
+            var totalSets = remember { timerViewModel.intervalState.sets.value }
 
             NavHost(
                 navController = navController,
@@ -96,7 +97,7 @@ fun IntervalTimerContent() {
                 composable(route = IntervalTimerScreens.WORK_SCREEN.name) {
 
                     WorkScreen(
-                        intervalState = viewModel.intervalState,
+                        intervalState = timerViewModel.intervalState,
                         onNavigateToRest = { navController.navigate(IntervalTimerScreens.REST_SCREEN.name) },
                         totalSets = totalSets
                     )
@@ -113,16 +114,19 @@ fun IntervalTimerContent() {
                             )
 
                         },
-                        intervalState = viewModel.intervalState,
+                        intervalState = timerViewModel.intervalState,
                         totalSets = totalSets
                     )
                 }
                 composable(route = IntervalTimerScreens.HOME_SCREEN.name) {
+
+                    val homeViewModel: HomeViewModel = hiltViewModel()
                     HomeScreen(
-                        timerViewModel = viewModel,
-                        intervalState = viewModel.intervalState,
+                        homeViewModel = homeViewModel,
+                        timerViewModel = timerViewModel,
+                        intervalState = timerViewModel.intervalState,
                         onNavigateToReady = {
-                            totalSets = viewModel.intervalState.sets.value
+                            totalSets = timerViewModel.intervalState.sets.value
                             navController.navigate(IntervalTimerScreens.READY_SCREEN.name)
                         })
                 }
