@@ -31,6 +31,7 @@ import com.example.intervaltimer.screens.home.HomeScreen
 import com.example.intervaltimer.screens.home.HomeViewModel
 import com.example.intervaltimer.screens.ready.ReadyScreen
 import com.example.intervaltimer.screens.rest.RestScreen
+import com.example.intervaltimer.screens.save.SavedIntervalViewModel
 import com.example.intervaltimer.screens.save.SavedScreen
 import com.example.intervaltimer.screens.work.WorkScreen
 import com.example.intervaltimer.ui.theme.IntervalTimerTheme
@@ -131,7 +132,8 @@ fun IntervalTimerContent() {
                         })
                 }
                 composable(route = IntervalTimerScreens.SAVED_SCREEN.name) {
-                    SavedScreen()
+                    val savedIntervalViewModel: SavedIntervalViewModel = hiltViewModel()
+                    SavedScreen(savedIntervalViewModel)
                 }
                 composable(route = IntervalTimerScreens.READY_SCREEN.name) {
                     ReadyScreen(onNavigateToWorkScreen = {
