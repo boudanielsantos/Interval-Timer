@@ -133,7 +133,10 @@ fun IntervalTimerContent() {
                 }
                 composable(route = IntervalTimerScreens.SAVED_SCREEN.name) {
                     val savedIntervalViewModel: SavedIntervalViewModel = hiltViewModel()
-                    SavedScreen(savedIntervalViewModel)
+                    SavedScreen(savedIntervalViewModel, onNavigateToReady = {
+                        totalSets = timerViewModel.intervalState.sets.value
+                        navController.navigate(IntervalTimerScreens.READY_SCREEN.name)
+                    }, timerViewModel)
                 }
                 composable(route = IntervalTimerScreens.READY_SCREEN.name) {
                     ReadyScreen(onNavigateToWorkScreen = {
@@ -146,6 +149,8 @@ fun IntervalTimerContent() {
                 composable(route = IntervalTimerScreens.FINISH_SCREEN.name) {
                     FinishScreen(
                         onNavigateToWork = {
+                            //Reset the initial sets to the total set when Restarting the workout
+                            timerViewModel.intervalState.sets.value = totalSets
                             navController.navigate(IntervalTimerScreens.WORK_SCREEN.name)
                         }
                     )

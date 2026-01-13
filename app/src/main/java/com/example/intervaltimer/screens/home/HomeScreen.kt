@@ -41,11 +41,12 @@ fun HomeScreen(
     intervalState: IntervalState,
     onNavigateToReady: () -> Unit
 ) {
-    DisposableEffect(key1 = Unit) {
-        onDispose {
-            timerViewModel.reset()
-        }
-    }
+    //Commenting this out since it introduced a bug that resets the timer when navigating to ready screen
+//    DisposableEffect(key1 = Unit) {
+//        onDispose {
+//            timerViewModel.reset()
+//        }
+//    }
     HomeContent(intervalState = intervalState, onNavigateToReady = onNavigateToReady, homeViewModel)
 }
 

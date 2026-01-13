@@ -35,14 +35,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.intervaltimer.model.IntervalTimer
+import com.example.intervaltimer.viewmodel.TimerViewModel
 
 @Composable
-fun SavedScreen(savedIntervalViewModel: SavedIntervalViewModel) {
+fun SavedScreen(
+    savedIntervalViewModel: SavedIntervalViewModel,
+    onNavigateToReady: () -> Unit,
+    timerViewModel: TimerViewModel
+) {
     val savedIntervals by savedIntervalViewModel.intervals.collectAsState()
     if (savedIntervals.data == null || savedIntervals.data!!.isEmpty()) {
         ShowNoSavedIntervals()
     } else {
-        SavedContent(savedIntervals.data!!)
+        SavedContent(savedIntervals.data!!, onNavigateToReady, timerViewModel)
     }
 
 }
@@ -63,7 +68,11 @@ fun ShowNoSavedIntervals() {
 }
 
 @Composable
-fun SavedContent(intervals: List<IntervalTimer>) {
+fun SavedContent(
+    intervals: List<IntervalTimer>,
+    onNavigateToReady: () -> Unit,
+    timerViewModel: TimerViewModel
+) {
 
     LazyColumn(
         modifier = Modifier
@@ -73,14 +82,13 @@ fun SavedContent(intervals: List<IntervalTimer>) {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(items = intervals) { interval ->
-            IntervalItem(interval)
+            IntervalItem(interval, onNavigateToReady, timerViewModel)
         }
     }
 
 }
 
 @Composable
-@Preview
 fun IntervalItem(
     interval: IntervalTimer = IntervalTimer(
         name = "Interval 1",
@@ -89,7 +97,9 @@ fun IntervalItem(
         restCountMinute = 20,
         restCountSecond = 30,
         sets = 5
-    )
+    ),
+    onNavigateToReady: () -> Unit,
+    timerViewModel: TimerViewModel
 ) {
     var showMenu by remember { mutableStateOf(false) }
     Card(
@@ -127,12 +137,28 @@ fun IntervalItem(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .clickable {
-
+                        timerViewModel.setIntervalValues(
+                            workMinutes = interval.workCountMinute,
+                            workSeconds = interval.workCountSecond,
+                            restMinutes = interval.restCountMinute,
+                            restSeconds = interval.restCountSecond,
+                            workSets = interval.sets
+                        )
+                        onNavigateToReady()
                     }
                     .padding(bottom = 8.dp, end = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    timerViewModel.setIntervalValues(
+                        workMinutes = interval.workCountMinute,
+                        workSeconds = interval.workCountSecond,
+                        restMinutes = interval.restCountMinute,
+                        restSeconds = interval.restCountSecond,
+                        workSets = interval.sets
+                    )
+                    onNavigateToReady()
+                }) {
                     Icon(
                         imageVector = Icons.Default.PlayArrow,
                         contentDescription = "Play Saved Workout Icon"
