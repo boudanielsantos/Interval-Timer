@@ -13,8 +13,18 @@ class TimerViewModel @Inject constructor() : ViewModel() {
         name = mutableStateOf(""),
         sets = mutableStateOf(1),
         workCountMinute = mutableStateOf(0),
-        workCountSecond = mutableStateOf(0),
+        workCountSecond = mutableStateOf(1),
         restCountMinute = mutableStateOf(0),
-        restCountSecond = mutableStateOf(0)
+        restCountSecond = mutableStateOf(1)
     )
+
+    fun reset() {
+        intervalState?.apply {
+            sets.value = 1
+            workCountMinute.value = 0
+            workCountSecond.value = 1
+            restCountMinute.value = 0
+            restCountSecond.value = 1
+        }
+    }
 }

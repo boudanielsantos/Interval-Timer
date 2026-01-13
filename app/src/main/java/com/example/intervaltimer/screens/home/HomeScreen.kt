@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +29,20 @@ import androidx.compose.ui.graphics.Interval
 import androidx.compose.ui.unit.dp
 import com.example.intervaltimer.components.PlusMinusField
 import com.example.intervaltimer.model.IntervalState
+import com.example.intervaltimer.viewmodel.TimerViewModel
 import java.util.logging.Logger
 
 @Composable
-fun HomeScreen(intervalState: IntervalState, onNavigateToReady: () -> Unit) {
+fun HomeScreen(
+    timerViewModel: TimerViewModel,
+    intervalState: IntervalState,
+    onNavigateToReady: () -> Unit
+) {
+    DisposableEffect(key1 = Unit) {
+        onDispose {
+            timerViewModel.reset()
+        }
+    }
     HomeContent(intervalState = intervalState, onNavigateToReady = onNavigateToReady)
 }
 

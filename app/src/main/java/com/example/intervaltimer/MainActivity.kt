@@ -119,6 +119,7 @@ fun IntervalTimerContent() {
                 }
                 composable(route = IntervalTimerScreens.HOME_SCREEN.name) {
                     HomeScreen(
+                        timerViewModel = viewModel,
                         intervalState = viewModel.intervalState,
                         onNavigateToReady = {
                             totalSets = viewModel.intervalState.sets.value
