@@ -8,7 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +50,7 @@ fun RestScreen(
     val isRunning by TimerService.isRunning
     var wasRunning by remember { mutableStateOf(isRunning) }
     val skipClicked = remember { mutableStateOf(false) }
+    val isPaused = TimerService.isPaused
     LaunchedEffect(key1 = Unit) {
         val totalRestTime =
             (intervalState.restCountMinute.value * 60 + intervalState.restCountSecond.value) * 1000L
@@ -75,7 +83,8 @@ fun RestScreen(
         onNavigateToWorkScreen = onNavigateToWorkScreen,
         onNavigateToFinishScreen = onNavigateToFinishScreen,
         context = context,
-        skipClicked = skipClicked
+        skipClicked = skipClicked,
+        isPaused = isPaused
     )
 }
 
@@ -88,7 +97,8 @@ fun RestContent(
     onNavigateToWorkScreen: () -> Unit = {},
     onNavigateToFinishScreen: () -> Unit = {},
     context: Context,
-    skipClicked: MutableState<Boolean>
+    skipClicked: MutableState<Boolean>,
+    isPaused: MutableState<Boolean>
 
 ) {
     val scope = rememberCoroutineScope()
@@ -110,7 +120,26 @@ fun RestContent(
 
             Text(text = "REST", fontSize = 45.sp, color = Color.LightGray)
         }
+        FilledIconButton(
+            shape = CircleShape,
+            onClick = {
+                val action = if (isPaused.value) TimerService.ACTION_RESUME else TimerService.ACTION_PAUSE
+                val intent = Intent(context, TimerService::class.java).apply {
+                    this.action = action
+                }
+                context.startService(intent)
 
+            },
+            modifier = Modifier
+                .size(90.dp)
+                .align(Alignment.BottomCenter)
+                .padding(12.dp)
+        ) {
+            Icon(
+                imageVector = if (!isPaused.value) Icons.Default.Pause else Icons.Default.PlayArrow,
+                contentDescription = "Pause Icon"
+            )
+        }
         Button(
             onClick = {
                 skipClicked.value = true
