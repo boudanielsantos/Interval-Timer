@@ -66,9 +66,7 @@ fun HomeContent(
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .border(2.dp, Color.Blue, RoundedCornerShape(8.dp)),
-                color = Color.LightGray,
-                shape = RoundedCornerShape(8.dp)
+                    .border(2.dp, Color.LightGray.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,7 +134,7 @@ fun HomeContent(
                     Button(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+                            .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
                             .height(45.dp),
                         shape = RoundedCornerShape(8.dp),
                         onClick = { onNavigateToReady() }) {
