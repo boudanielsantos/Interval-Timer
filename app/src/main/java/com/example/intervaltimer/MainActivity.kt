@@ -148,10 +148,10 @@ fun IntervalTimerContent() {
 
                 composable(route = IntervalTimerScreens.FINISH_SCREEN.name) {
                     FinishScreen(
-                        onNavigateToWork = {
+                        onNavigateToReady = {
                             //Reset the initial sets to the total set when Restarting the workout
                             timerViewModel.intervalState.sets.value = totalSets
-                            navController.navigate(IntervalTimerScreens.WORK_SCREEN.name)
+                            navController.navigate(IntervalTimerScreens.READY_SCREEN.name)
                         }
                     )
                 }

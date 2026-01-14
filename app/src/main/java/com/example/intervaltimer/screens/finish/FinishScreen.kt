@@ -25,14 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun FinishScreen(onNavigateToWork: () -> Unit) {
-    FinishContent(onNavigateToWork = onNavigateToWork)
+fun FinishScreen(onNavigateToReady: () -> Unit) {
+    FinishContent(onNavigateToReady = onNavigateToReady)
 }
 
 
 @Preview
 @Composable
-fun FinishContent(onNavigateToWork: () -> Unit = {}) {
+fun FinishContent(onNavigateToReady: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,7 +53,7 @@ fun FinishContent(onNavigateToWork: () -> Unit = {}) {
         IconButton(
             modifier = Modifier
                 .padding(6.dp)
-                .align(Alignment.BottomCenter), onClick = { onNavigateToWork() }) {
+                .align(Alignment.BottomCenter), onClick = { onNavigateToReady() }) {
             Icon(
                 imageVector = Icons.Default.Refresh, contentDescription = "Refresh Icon",
                 modifier = Modifier.size(100.dp)
