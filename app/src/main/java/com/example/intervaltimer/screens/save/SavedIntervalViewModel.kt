@@ -43,4 +43,8 @@ class SavedIntervalViewModel @Inject constructor(val intervalTimerRepository: In
     fun deleteInterval(intervalTimer: IntervalTimer) = viewModelScope.launch {
         intervalTimerRepository.deleteInterval(intervalTimer)
     }
+
+    fun updateInterval(intervalTimer: IntervalTimer) = viewModelScope.launch {
+        intervalTimerRepository.updateInterval(intervalTimer)
+    }
 }
