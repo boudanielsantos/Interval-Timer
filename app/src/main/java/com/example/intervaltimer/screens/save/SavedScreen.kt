@@ -394,7 +394,11 @@ fun EditableIntervalItem(
 
 @Composable
 fun UneditableIntervalItem(interval: IntervalTimer) {
-    Text(interval.name, style = MaterialTheme.typography.headlineLarge)
+    Text(
+        interval.name,
+        style = MaterialTheme.typography.headlineLarge,
+        modifier = Modifier.padding(8.dp)
+    )
 
     Text(
         "Sets :     ${interval.sets}x", style = MaterialTheme.typography.labelLarge,
