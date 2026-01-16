@@ -39,6 +39,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun PlusMinusField(
     label: String,
+    modifier: Modifier = Modifier,
     firstValueState: MutableState<Int>,
     secondValueState: MutableState<Int>? = null,
     onMinus: () -> Unit,
@@ -72,7 +73,7 @@ fun PlusMinusField(
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -103,4 +103,16 @@ dependencies {
     //Jetpack Compose Icons
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
+    //Unit test dependencies
+
+    testImplementation("org.robolectric:robolectric:4.11.1")
+
+
+    // Other useful testing libraries you will likely need:
+    // For testing coroutines
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    // For mocking objects and dependencies
+    testImplementation("io.mockk:mockk:1.13.10")
+    // For testing Jetpack Compose UI
+    testImplementation("androidx.compose.ui:ui-test-junit4:1.7.0-beta01")
 }

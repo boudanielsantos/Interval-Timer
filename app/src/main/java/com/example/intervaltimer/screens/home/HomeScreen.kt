@@ -73,6 +73,7 @@ fun HomeContent(
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     PlusMinusField(
+                        modifier = Modifier.padding(8.dp),
                         label = "SETS",
                         onMinus = {
                             if (intervalState.sets.value > 1)
@@ -84,6 +85,7 @@ fun HomeContent(
                         firstValueState = intervalState.sets
                     )
                     PlusMinusField(
+                        modifier = Modifier.padding(8.dp),
                         label = "WORK",
                         onMinus = {
                             if (intervalState.workCountSecond.value == 0) {
@@ -108,6 +110,7 @@ fun HomeContent(
                         isTime = true
                     )
                     PlusMinusField(
+                        modifier = Modifier.padding(8.dp),
                         label = "REST",
                         onMinus = {
                             if (intervalState.restCountSecond.value == 0) {
